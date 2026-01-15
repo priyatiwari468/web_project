@@ -27,6 +27,7 @@ services:
       - "7000:7000"
     environment:
       - NODE_ENV=production
+      - PORT=7000
       - MONGODB_CONNECTION_STRING=mongodb://admin:password123@mongodb:27017/hotel-booking?authSource=admin
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-secret-key-change-this}
       - FRONTEND_URL=http://localhost:3000

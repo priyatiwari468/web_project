@@ -1,8 +1,14 @@
 # Docker Setup for Hotel Booking App
 
 ## Prerequisites
-- Docker installed on your machine
-- Docker Compose installed
+- Docker Desktop installed on your machine
+- Docker Compose (included with Docker Desktop)
+
+## ⚠️ Important Notes
+
+1. **Modern Docker Compose**: Use `docker compose` (with space) instead of `docker-compose` (with hyphen)
+2. **Environment Variables**: Must create `.env` file before running
+3. **First Run**: Initial build may take 5-10 minutes
 
 ## Quick Start
 
@@ -14,7 +20,12 @@
 
 2. **Build and start all services:**
    ```bash
-   docker-compose up --build
+   docker compose up --build
+   ```
+   
+   Or in detached mode:
+   ```bash
+   docker compose up -d --build
    ```
 
 3. **Access the application:**
@@ -26,52 +37,51 @@
 
 ### Start services (detached mode)
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Stop services
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Stop services and remove volumes (clean slate)
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ### View logs
 ```bash
 # All services
-docker-compose logs -f
+docker compose logs -f
 
 # Specific service
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f mongodb
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f mongodb
 ```
 
 ### Rebuild specific service
 ```bash
-docker-compose up --build backend
-docker-compose up --build frontend
+docker compose up --build backend
+docker compose up --build frontend
 ```
 
 ### Execute commands in running container
 ```bash
 # Access backend shell
-docker-compose exec backend sh
+docker compose exec backend sh
 
 # Access MongoDB shell
-docker-compose exec mongodb mongosh -u admin -p password123
+docker compose exec mongodb mongosh -u admin -p password123
 ```
 
 ## Development Mode
 
-For development with hot-reload, you can modify the docker-compose.yml or create a `docker-compose.dev.yml`:
+For development with hot-reload:
 
 ```bash
-# Use development override
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
 ## Environment Variables
@@ -110,5 +120,13 @@ docker-compose ps
 ### Clear all Docker resources
 ```bash
 docker-compose down -v
+docker compose down -v
 docker system prune -a
 ```
+
+## Common Issues Fixed
+
+✅ **CORS Configuration**: Backend now uses `FRONTEND_URL` environment variable
+✅ **Port Configuration**: Backend port is configurable via `PORT` env variable  
+✅ **API URL**: Frontend uses `VITE_API_BASE_URL` from environment
+✅ **MongoDB Connection**: Properly configured for Docker networking
