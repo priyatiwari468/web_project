@@ -35,6 +35,12 @@ services:
       - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
       - STRIPE_API_KEY=${STRIPE_API_KEY}
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:7000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     depends_on:
       - mongodb
     networks:
@@ -45,13 +51,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=http://localhost:7000
+        - VITE_STRIPE_PUB_KEY=${VITE_STRIPE_PUB_KEY}
     container_name: hotel-booking-frontend
     restart: unless-stopped
     ports:
       - "3000:80"
-    environment:
-      - VITE_API_BASE_URL=http://localhost:7000
-      - VITE_STRIPE_PUB_KEY=${VITE_STRIPE_PUB_KEY}
     depends_on:
       - backend
     networks:

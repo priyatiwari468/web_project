@@ -9,6 +9,19 @@
 1. **Modern Docker Compose**: Use `docker compose` (with space) instead of `docker-compose` (with hyphen)
 2. **Environment Variables**: Must create `.env` file before running
 3. **First Run**: Initial build may take 5-10 minutes
+4. **API URL**: Frontend must use `http://localhost:7000` for API calls
+5. **CORS**: Backend allows requests from `http://localhost:3000`
+
+## Architecture Overview
+
+```
+┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
+│   Frontend      │         │    Backend       │         │    MongoDB      │
+│  (React+Vite)   │────────▶│  (Node/Express)  │────────▶│   Database      │
+│   Port: 3000    │         │    Port: 7000    │         │   Port: 27017   │
+│   (via Nginx)   │         │   (TypeScript)   │         │                 │
+└─────────────────┘         └──────────────────┘         └─────────────────┘
+```
 
 ## Quick Start
 
@@ -126,7 +139,21 @@ docker system prune -a
 
 ## Common Issues Fixed
 
-✅ **CORS Configuration**: Backend now uses `FRONTEND_URL` environment variable
+✅ **CORS Configuration**: Backend uses `FRONTEND_URL` environment variable  
 ✅ **Port Configuration**: Backend port is configurable via `PORT` env variable  
-✅ **API URL**: Frontend uses `VITE_API_BASE_URL` from environment
-✅ **MongoDB Connection**: Properly configured for Docker networking
+✅ **API URL**: Frontend uses `VITE_API_BASE_URL` from build args  
+✅ **MongoDB Connection**: Properly configured for Docker networking  
+✅ **Static File Serving**: Removed from backend, handled by Nginx in frontend container  
+✅ **Build Args**: Frontend environment variables passed as build arguments  
+✅ **Health Checks**: Backend includes health check endpoint and Docker healthcheck  
+✅ **Security Headers**: Nginx configured with security headers  
+✅ **Compression**: Gzip enabled in Nginx for better performance
+
+## Key Features
+
+- **Multi-stage builds** for optimized image sizes
+- **Health checks** to ensure services are running
+- **Persistent MongoDB data** using Docker volumes
+- **Network isolation** with Docker networks
+- **Environment-based configuration** for flexibility
+- **Production-ready** with security best practices

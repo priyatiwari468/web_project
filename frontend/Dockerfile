@@ -13,6 +13,14 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Build args for environment variables
+ARG VITE_API_BASE_URL
+ARG VITE_STRIPE_PUB_KEY
+
+# Set env vars for build
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+ENV VITE_STRIPE_PUB_KEY=$VITE_STRIPE_PUB_KEY
+
 # Build the app
 RUN npm run build
 
